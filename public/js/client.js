@@ -1,10 +1,8 @@
 var DroneApp = DroneApp || {};
 
 DroneApp.casualties = 0;
-
-DroneApp.yemen    = [];
-DroneApp.pakistan = [];
-DroneApp.somalia  = [];
+DroneApp.markers  = [];
+DroneApp.markerCluster;
 
 DroneApp.initialize = function(){
   this.canvas = document.getElementById("map");
@@ -61,7 +59,6 @@ DroneApp.requestData = function(){
 DroneApp.loopThroughData = function(data){
   return $.each(data.strike, function(i, drone){
     // var deaths = drone.deaths_max;
-    // var 
     DroneApp.plotData(drone);
     DroneApp.casualties += parseInt(drone.deaths_max);
     // console.log(DroneApp.casualties)
@@ -76,11 +73,29 @@ DroneApp.plotData = function(drone){
     map: DroneApp.map,
     icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
   });
+
+  // DroneApp.markers.push(marker);
+  // console.log(marker.position.lat());
+  // console.log(marker.position.lng());
+  // DroneApp.markers.push([marker.position.lat(), marker.position.lng()]);
+
+  // // console.log(DroneApp.markers);
+
+  // var options = {
+  //           imagePath: '/node_modules/js-marker-clusterer/images/m1'
+  //       };
+
+  // DroneApp.markerCluster = new MarkerClusterer(DroneApp.map, DroneApp.markers, options);
+
+  // // console.log(DroneApp.markerCluster.getTotalClusters());
+
+  // DroneApp.markerCluster.addMarker(DroneApp.markers, true);
+
   DroneApp.openInfo(drone, marker);
 };
 
-DroneApp.openInfo = function(drone, marker){
 
+DroneApp.openInfo = function(drone, marker){
   marker.addListener("click", function(){
     var droneCountry    = drone.country;
     var droneLocation   = drone.location;
@@ -104,4 +119,4 @@ DroneApp.openInfo = function(drone, marker){
 
 document.addEventListener("DOMContentLoaded", function(){
   DroneApp.initialize();
-})
+});
