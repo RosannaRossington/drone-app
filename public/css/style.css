@@ -1,0 +1,42 @@
+html, body {
+  background-color: BlanchedAlmond;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/*div {
+  display: inline-block;
+  padding: 0px;
+  margin: 0px;
+}*/
+
+#map {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+#infoBox {
+  display: none;
+  background-color: white;
+  height: 250px;
+  width: 250px;
+  position: absolute;
+  left: 40%;
+  top: 25%;
+}
+
+#filter {
+  background-color: white;
+  height: 100%;
+  width: 200px;
+  position: absolute;
+  /*left: 100%; */
+  top: 0%;
+  display: inline-block;
+}
+
+li {
+  list-style-type: none;
+}
