@@ -21,7 +21,6 @@ html, body {
 #infoBox {
   display: none;
   background-color: white;
-  height: 250px;
   width: 250px;
   position: absolute;
   left: 40%;
