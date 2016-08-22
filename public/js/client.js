@@ -60,11 +60,14 @@ DroneApp.requestData = function(){
 
 DroneApp.loopThroughData = function(data){
   return $.each(data.strike, function(i, drone){
+    // var deaths = drone.deaths_max;
+    // var 
     DroneApp.plotData(drone);
     DroneApp.casualties += parseInt(drone.deaths_max);
     // console.log(DroneApp.casualties)
   });
 };
+
 
 DroneApp.plotData = function(drone){
   var latlng = new google.maps.LatLng(drone.lat, drone.lon);
@@ -79,14 +82,24 @@ DroneApp.plotData = function(drone){
 DroneApp.openInfo = function(drone, marker){
 
   marker.addListener("click", function(){
-    var droneInfo = drone.location;
-    $("#infoBox").html(droneInfo);
-    $("#infoBox").toggle();
+    var droneLocation   = drone.location;
+    var droneDeaths     = drone.deaths_max;
+    var droneDate       = new Date(drone.date).toDateString();
+    var droneNarrative  = drone.narrative;
+    var droneLink       = drone.bij_link;
+    var closeButton = document.getElementById("closeButton");
 
+    $("#main-content").remove();
+
+    $("#infoBox").prepend("<div id='main-content'><h3>" + "<span>Location:</span> " + droneLocation + "</h3>" + "<h4>" + "<span>Date: </span>" + droneDate + "</h4>" + "<h4>" + "<span>Deaths: </span>" + droneDeaths + "</h4>" + "<h4>" + "<span>Summary: </span>"+ "<a href='" + droneLink + "'> " + droneNarrative + "</h4> </a></div>");
+    $("#infoBox").show();
+
+    closeButton.addEventListener("click", function(){
+      $("#infoBox").hide();
+    });
   });
 
 }
-
 
 document.addEventListener("DOMContentLoaded", function(){
   DroneApp.initialize();
