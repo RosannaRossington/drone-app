@@ -23,8 +23,8 @@ DroneApp.changeCenter = function(map){
   
   for( var i = 0; i< buttons.length; i++){
     buttons[i].addEventListener("click", function(){
-      // toggle radio buttons
 
+      // toggle radio buttons
       for(var i = 0; i < buttons.length; i++){
         buttons[i].checked = false;
       }
@@ -82,6 +82,7 @@ DroneApp.plotData = function(drone){
 DroneApp.openInfo = function(drone, marker){
 
   marker.addListener("click", function(){
+    var droneCountry    = drone.country;
     var droneLocation   = drone.location;
     var droneDeaths     = drone.deaths_max;
     var droneDate       = new Date(drone.date).toDateString();
@@ -91,7 +92,7 @@ DroneApp.openInfo = function(drone, marker){
 
     $("#main-content").remove();
 
-    $("#infoBox").prepend("<div id='main-content'><h3>" + "<span>Location:</span> " + droneLocation + "</h3>" + "<h4>" + "<span>Date: </span>" + droneDate + "</h4>" + "<h4>" + "<span>Deaths: </span>" + droneDeaths + "</h4>" + "<h4>" + "<span>Summary: </span>"+ "<a href='" + droneLink + "'> " + droneNarrative + "</h4> </a></div>");
+    $("#infoBox").prepend("<div id='main-content'><h3>" + "<span>Location:</span> " + droneLocation + ", " +droneCountry + "</h3>" + "<h4>" + "<span>Date: </span>" + droneDate + "</h4>" + "<h4>" + "<span>Deaths: </span>" + droneDeaths + "</h4>" + "<h4>" + "<span>Summary: </span>"+ "<a href='" + droneLink + "'> " + droneNarrative + "</h4> </a></div>");
     $("#infoBox").show();
 
     closeButton.addEventListener("click", function(){
