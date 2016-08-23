@@ -1,7 +1,7 @@
 var DroneApp = DroneApp || {};
 
 DroneApp.markers  = [];
-DroneApp.markerCluster;
+DroneApp.markerclusterer;
 
 DroneApp.stats = {
   allStrikes: {
@@ -89,23 +89,7 @@ DroneApp.plotData = function(drone){
     icon: "http://maps.google.com/mapfiles/ms/icons/red.png"
   });
 
-  // DroneApp.markers.push(marker);
-  // console.log(marker.position.lat());
-  // console.log(marker.position.lng());
-  // DroneApp.markers.push([marker.position.lat(), marker.position.lng()]);
-
-  // // console.log(DroneApp.markers);
-
-  // var options = {
-  //           imagePath: '/node_modules/js-marker-clusterer/images/m1'
-  //       };
-
-  // DroneApp.markerCluster = new MarkerClusterer(DroneApp.map, DroneApp.markers, options);
-
-  // // console.log(DroneApp.markerCluster.getTotalClusters());
-
-  // DroneApp.markerCluster.addMarker(DroneApp.markers, true);
-
+  DroneApp.markers.push(this.marker);
   DroneApp.popUpWindow(drone, this.marker);
 };
 
@@ -174,8 +158,23 @@ DroneApp.changeMapPosition = function(map){
 
 DroneApp.sideBarInfo = function(selectedRegion){
   $("#country-stats").remove()
+  // DroneApp.animatedCounter();
   $("#filter").append("<div id='country-stats'><h3><span>Strikes:</span> " + selectedRegion.strikes + "</h3><h3><span>Deaths:</span> " + selectedRegion.deaths + "</h3><h3><span>Injuries:</span> " + selectedRegion.injuries) + "</h3></div>";
 };
+
+// DroneApp.animatedCounter = function(){
+//   $('.count').each(function() {
+//       $(this).prop('Counter',0).animate({
+//           Counter: $(this).text()
+//       }, {
+//           duration: 4000,
+//           easing: 'swing',
+//           step: function (now) {
+//               $(this).text(Math.ceil(now));
+//           }
+//       });
+//   });
+// };
 
 document.addEventListener("DOMContentLoaded", function(){
   DroneApp.initialize();

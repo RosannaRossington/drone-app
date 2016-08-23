@@ -14,6 +14,12 @@ h1, h2 {
   font-family: 'Permanent Marker', cursive;
 }
 
+h3, h4, h5 {
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 5px;
+}
+
 .header {
   text-align: center;
 }
