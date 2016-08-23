@@ -36,44 +36,7 @@ DroneApp.initialize = function(){
   });
 
   DroneApp.requestData();
-  DroneApp.changeCenter(this.map);
-};
-
-// Changes the contents of the left hand bar and changes the maps position
-DroneApp.changeCenter = function(map){
-  var buttons = document.getElementsByClassName("radio");
-  
-  for( var i = 0; i< buttons.length; i++){
-    buttons[i].addEventListener("click", function(){
-      for(var i = 0; i < buttons.length; i++){
-        buttons[i].checked = false;
-      }
-  this.checked = true;
-
-      // changes position
-  if (this.id === "yemen-strikes"){
-    map.setCenter({ lat: 15.5527, lng: 48.5164 });
-    map.setZoom(7);
-    $("#country-stats").remove()
-    $("#filter").append("<div id='country-stats'> <h3>Strikes: " + DroneApp.stats.yemenStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.stats.yemenStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.stats.yemenStrikes.injuries) + "</h3></div>";
-    } else if (this.id === "somalia-strikes"){
-        map.setCenter({ lat: 5.1521, lng: 46.1996 }); 
-        map.setZoom(7);
-        $("#country-stats").remove()
-        $("#filter").append("<div id='country-stats'> <h3>Strikes: " + DroneApp.stats.somaliaStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.stats.somaliaStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.stats.somaliaStrikes.injuries) + "</h3></div>";
-    } else if (this.id === "pakistan-strikes"){
-        map.setCenter({ lat: 30.3753, lng: 69.3451}); 
-        map.setZoom(7);
-        $("#country-stats").remove()
-        $("#filter").append("<div id='country-stats'> <h3>Strikes: " + DroneApp.stats.pakistanStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.stats.pakistanStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.stats.pakistanStrikes.injuries) + "</h3></div>";
-    } else if (this.id === "all-strikes"){
-        map.setCenter({ lat: 16.9931, lng: 54.7028 }); 
-        map.setZoom(4);
-        $("#country-stats").remove()
-        $("#filter").append("<div id='country-stats'> <h3>Strikes: " + DroneApp.stats.allStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.stats.allStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.stats.allStrikes.injuries) + "</h3></div>";
-      };
-    });
-  };
+  DroneApp.changeMapPosition(this.map);
 };
 
 // Requests the API data
@@ -114,15 +77,14 @@ DroneApp.incrementVariables = function(drone){
        DroneApp.stats.pakistanStrikes.injuries += +drone.injuries || 0;
   };
 
-  $("#country-stats").remove()
-  $("#filter").append("<div id='country-stats'> <h3>Strikes: " + DroneApp.stats.allStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.stats.allStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.stats.allStrikes.injuries) + "</h3></div>";
+  DroneApp.sideBarInfo(DroneApp.stats.allStrikes);
 };
 
 // Plots the data onto the map with markers
 DroneApp.plotData = function(drone){
-  var latlng = new google.maps.LatLng(drone.lat, drone.lon);
-  var marker = new google.maps.Marker({
-    position: latlng,
+  this.latlng = new google.maps.LatLng(drone.lat, drone.lon);
+  this.marker = new google.maps.Marker({
+    position: this.latlng,
     map: DroneApp.map,
     icon: "http://maps.google.com/mapfiles/ms/icons/red.png"
   });
@@ -144,38 +106,75 @@ DroneApp.plotData = function(drone){
 
   // DroneApp.markerCluster.addMarker(DroneApp.markers, true);
 
-  DroneApp.infoWindow(drone, marker);
+  DroneApp.popUpWindow(drone, this.marker);
 };
 
 // Adds the drones information to an info window
-DroneApp.infoWindow = function(drone, marker){
+DroneApp.popUpWindow = function(drone, marker){
   marker.addListener("click", function(){
-    var closeButton = document.getElementById("closeButton");
-    var droneCountry    = drone.country;
-    var droneLocation   = drone.location;
-    var droneDeaths     = drone.deaths_max;
-    var droneDate       = new Date(drone.date).toDateString();
-    var droneNarrative  = drone.narrative;
-    var droneLink       = drone.bij_link;
-    var droneTarget     = drone.target;
+    this.closeButton     = document.getElementById("closeButton");
+    this.droneCountry    = drone.country;
+    this.droneLocation   = drone.location;
+    this.droneDeaths     = drone.deaths_max;
+    this.droneDate       = new Date(drone.date).toDateString();
+    this.droneNarrative  = drone.narrative;
+    this.droneLink       = drone.bij_link;
+    this.droneTarget     = drone.target;
     
-    if (droneTarget === ""){
-      droneTarget = "Unknown";
+    if (this.droneTarget === ""){
+      this.droneTarget = "Unknown";
     } else {
-      droneTarget = drone.target;
+      this.droneTarget = drone.target;
     }
 
     $("#main-content").remove();
 
-    $("#infoBox").prepend("<div id='main-content'><h3>" + "<span>Location:</span> " + droneLocation + ", " + droneCountry + "</h3>" + "<h4>" + "<span>Date: </span>" + droneDate + "</h4>" + "<h4>" + "<span>Deaths: </span>" + droneDeaths + "</h4>" + "<h4><span>Target</span>: " + droneTarget + "</h4> <h4>" + "<span>Summary: </span>"+ "<a href='" + droneLink + "'> " + droneNarrative + "</h4> </a></div>");
+    $("#infoBox").prepend("<div id='main-content'><h3>" + "<span>Location:</span> " + this.droneLocation + ", " + this.droneCountry + "</h3>" + "<h4>" + "<span>Date: </span>" + this.droneDate + "</h4>" + "<h4>" + "<span>Deaths: </span>" + this.droneDeaths + "</h4>" + "<h4><span>Target</span>: " + this.droneTarget + "</h4> <h4>" + "<span>Summary: </span>"+ "<a href='" + this.droneLink + "'> " + this.droneNarrative + "</h4> </a></div>");
     $("#infoBox").show();
 
-    closeButton.addEventListener("click", function(){
+    this.closeButton.addEventListener("click", function(){
       $("#infoBox").hide();
     });
-
   });
+};
 
+// Changes the contents of the left hand bar and changes the maps position
+DroneApp.changeMapPosition = function(map){
+  var self = this;
+  self.buttons = document.getElementsByClassName("radio");
+  
+  for (var i = 0; i< self.buttons.length; i++){
+    self.buttons[i].addEventListener("click", function(){
+      for (var i = 0; i < self.buttons.length; i++){
+        self.buttons[i].checked = false;
+      }
+
+    this.checked = true;
+
+  if (this.id === "yemen-strikes"){
+    map.setCenter({ lat: 15.5527, lng: 48.5164 });
+    map.setZoom(7);
+    DroneApp.sideBarInfo(DroneApp.stats.yemenStrikes);  
+    } else if (this.id === "somalia-strikes"){
+        map.setCenter({ lat: 5.1521, lng: 46.1996 }); 
+        map.setZoom(7);
+        DroneApp.sideBarInfo(DroneApp.stats.somaliaStrikes);
+    } else if (this.id === "pakistan-strikes"){
+        map.setCenter({ lat: 30.3753, lng: 69.3451}); 
+        map.setZoom(7);
+        DroneApp.sideBarInfo(DroneApp.stats.pakistanStrikes);
+    } else if (this.id === "all-strikes"){
+        map.setCenter({ lat: 16.9931, lng: 54.7028 }); 
+        map.setZoom(4);
+        DroneApp.sideBarInfo(DroneApp.stats.allStrikes);
+      };
+    });
+  };
+};
+
+DroneApp.sideBarInfo = function(selectedRegion){
+  $("#country-stats").remove()
+  $("#filter").append("<div id='country-stats'><h3><span>Strikes:</span> " + selectedRegion.strikes + "</h3><h3><span>Deaths:</span> " + selectedRegion.deaths + "</h3><h3><span>Injuries:</span> " + selectedRegion.injuries) + "</h3></div>";
 };
 
 document.addEventListener("DOMContentLoaded", function(){
