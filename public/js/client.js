@@ -1,16 +1,35 @@
 var DroneApp = DroneApp || {};
 
-DroneApp.casualties = 0;
 DroneApp.markers  = [];
 DroneApp.markerCluster;
+
+DroneApp.allStrikes = {
+  strikes: 0,
+  deaths: 0,
+  injuries: 0
+};
+DroneApp.yemenStrikes = {
+  strikes: 0,
+  deaths: 0,
+  injuries: 0
+};
+DroneApp.pakistanStrikes = {
+  strikes: 0,
+  deaths: 0,
+  injuries: 0
+};
+DroneApp.somaliaStrikes = {
+  strikes: 0,
+  deaths: 0,
+  injuries: 0
+};
 
 DroneApp.initialize = function(){
   this.canvas = document.getElementById("map");
   this.map = new google.maps.Map(this.canvas, {
     zoom: 4,
     center: { lat: 16.9931, lng: 54.7028 },
-    styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"administrative.country","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#81D4FA"},{"visibility":"on"}]}]
-    // styles: [{"featureType":"landscape","elementType":"geometry","stylers":[{"saturation":"-100"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels.text","stylers":[{"color":"#545454"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"saturation":"-87"},{"lightness":"-40"},{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.fill","stylers":[{"color":"#f0f0f0"},{"saturation":"-22"},{"lightness":"-16"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway.controlled_access","elementType":"labels.icon","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-52"},{"hue":"#00e4ff"},{"lightness":"-16"}]}]
+    styles: [{"featureType":"landscape","elementType":"geometry","stylers":[{"saturation":"-100"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels.text","stylers":[{"color":"#545454"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"saturation":"-87"},{"lightness":"-40"},{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.fill","stylers":[{"color":"#f0f0f0"},{"saturation":"-22"},{"lightness":"-16"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway.controlled_access","elementType":"labels.icon","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-52"},{"hue":"#00e4ff"},{"lightness":"-16"}]}]
   });
 
   DroneApp.requestData();
@@ -34,15 +53,23 @@ DroneApp.changeCenter = function(map){
       if (this.id === "yemen-strikes"){
         map.setCenter({ lat: 15.5527, lng: 48.5164 });
         map.setZoom(7);
+        $("#country-stats").remove()
+        $("#filter").append("<div id='country-stats'> <h3>All Strikes: " + DroneApp.yemenStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.yemenStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.yemenStrikes.injuries) + "</h3></div>";
         } else if (this.id === "somalia-strikes"){
          map.setCenter({ lat: 5.1521, lng: 46.1996 }); 
          map.setZoom(7);
+         $("#country-stats").remove()
+         $("#filter").append("<div id='country-stats'> <h3>All Strikes: " + DroneApp.somaliaStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.somaliaStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.somaliaStrikes.injuries) + "</h3></div>";
         } else if (this.id === "pakistan-strikes"){
           map.setCenter({ lat: 30.3753, lng: 69.3451}); 
           map.setZoom(7);
+          $("#country-stats").remove()
+          $("#filter").append("<div id='country-stats'> <h3>All Strikes: " + DroneApp.pakistanStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.pakistanStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.pakistanStrikes.injuries) + "</h3></div>";
         } else if (this.id === "all-strikes"){
           map.setCenter({ lat: 16.9931, lng: 54.7028 }); 
           map.setZoom(4);
+          $("#country-stats").remove()
+          $("#filter").append("<div id='country-stats'> <h3>All Strikes: " + DroneApp.allStrikes.strikes + "</h3> <h3>Deaths: " + DroneApp.allStrikes.deaths + "</h3> <h3>Injuries: " + DroneApp.allStrikes.injuries) + "</h3></div>";
         }
     });
   }
@@ -59,13 +86,27 @@ DroneApp.requestData = function(){
 
 DroneApp.loopThroughData = function(data){
   return $.each(data.strike, function(i, drone){
-    // var deaths = drone.deaths_max;
+
+    DroneApp.allStrikes.strikes += 1;
+    DroneApp.allStrikes.deaths += +drone.deaths_max || 0;
+    DroneApp.allStrikes.injuries += +drone.injuries || 0;
+    
+    if( drone.country === "Yemen" ){
+    DroneApp.yemenStrikes.strikes += 1;
+    DroneApp.yemenStrikes.deaths += +drone.deaths_max || 0;
+    DroneApp.yemenStrikes.injuries += +drone.injuries || 0;
+  } else if ( drone.country === "Somalia" ){
+    DroneApp.somaliaStrikes.strikes += 1;
+    DroneApp.somaliaStrikes.deaths += +drone.deaths_max || 0;
+    DroneApp.somaliaStrikes.injuries += +drone.injuries || 0;
+  } else if ( drone.country === "Pakistan" ){
+    DroneApp.pakistanStrikes.strikes += 1;
+    DroneApp.pakistanStrikes.deaths += +drone.deaths_max || 0;
+    DroneApp.pakistanStrikes.injuries += +drone.injuries || 0;
+  }
     DroneApp.plotData(drone);
-    DroneApp.casualties += parseInt(drone.deaths_max);
-    // console.log(DroneApp.casualties)
   });
 };
-
 
 DroneApp.plotData = function(drone){
   var latlng = new google.maps.LatLng(drone.lat, drone.lon);
