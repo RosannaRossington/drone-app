@@ -136,15 +136,15 @@ DroneApp.changeMapPosition = function(map){
     this.checked = true;
 
   if (this.id === "yemen-strikes"){
-    map.setCenter({ lat: 15.5527, lng: 48.5164 });
+    map.setCenter({ lat: 16.160990, lng: 46.088293});
     map.setZoom(7);
     DroneApp.sideBarInfo(DroneApp.stats.yemenStrikes);  
     } else if (this.id === "somalia-strikes"){
-        map.setCenter({ lat: 5.1521, lng: 46.1996 }); 
+        map.setCenter({ lat: 2.972296, lng: 43.626871}); 
         map.setZoom(7);
         DroneApp.sideBarInfo(DroneApp.stats.somaliaStrikes);
     } else if (this.id === "pakistan-strikes"){
-        map.setCenter({ lat: 30.3753, lng: 69.3451}); 
+        map.setCenter({ lat: 32.085580, lng: 69.194006}); 
         map.setZoom(7);
         DroneApp.sideBarInfo(DroneApp.stats.pakistanStrikes);
     } else if (this.id === "all-strikes"){
