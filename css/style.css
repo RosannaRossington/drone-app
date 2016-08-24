@@ -66,6 +66,10 @@ form {
   padding-left: 90px;
 }
 
+input[type=radio]:checked ~ label{
+  color: #e15454;
+}
+
 #country-stats {
   text-align: center;
   padding-top: 20px;
