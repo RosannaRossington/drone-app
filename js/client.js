@@ -54,33 +54,35 @@ DroneApp.requestData = function(){
 
 // Loops through the data
 DroneApp.loopThroughData = function(data){
-  return $.each(data.strike, function(i, drone){
+  $.each(data.strike, function(i, drone){
     DroneApp.incrementVariables(drone);
     DroneApp.plotData(drone);
   });
+
+  DroneApp.sideBarInfo(DroneApp.stats.allStrikes);
 };
 
 // Increments the variables and displays the initial data
 DroneApp.incrementVariables = function(drone){
-   DroneApp.stats.allStrikes.strikes += 1;
-   DroneApp.stats.allStrikes.deaths += +drone.deaths_max || 0;
-   DroneApp.stats.allStrikes.injuries += +drone.injuries || 0;
+  DroneApp.stats.allStrikes.strikes += 1;
+  DroneApp.stats.allStrikes.deaths += +drone.deaths_max || 0;
+  DroneApp.stats.allStrikes.injuries += +drone.injuries || 0;
    
-   if (drone.country === "Yemen"){
-       DroneApp.stats.yemenStrikes.strikes += 1;
-       DroneApp.stats.yemenStrikes.deaths += +drone.deaths_max || 0;
-       DroneApp.stats.yemenStrikes.injuries += +drone.injuries || 0;
-   } else if (drone.country === "Somalia"){
-       DroneApp.stats.somaliaStrikes.strikes += 1;
-       DroneApp.stats.somaliaStrikes.deaths += +drone.deaths_max || 0;
-       DroneApp.stats.somaliaStrikes.injuries += +drone.injuries || 0;
-   } else if (drone.country === "Pakistan"){
-       DroneApp.stats.pakistanStrikes.strikes += 1;
-       DroneApp.stats.pakistanStrikes.deaths += +drone.deaths_max || 0;
-       DroneApp.stats.pakistanStrikes.injuries += +drone.injuries || 0;
+  if (drone.country === "Yemen"){
+    DroneApp.stats.yemenStrikes.strikes += 1;
+    DroneApp.stats.yemenStrikes.deaths += +drone.deaths_max || 0;
+    DroneApp.stats.yemenStrikes.injuries += +drone.injuries || 0;
+  } else if (drone.country === "Somalia"){
+    DroneApp.stats.somaliaStrikes.strikes += 1;
+    DroneApp.stats.somaliaStrikes.deaths += +drone.deaths_max || 0;
+    DroneApp.stats.somaliaStrikes.injuries += +drone.injuries || 0;
+  } else if (drone.country === "Pakistan"){
+    DroneApp.stats.pakistanStrikes.strikes += 1;
+    DroneApp.stats.pakistanStrikes.deaths += +drone.deaths_max || 0;
+    DroneApp.stats.pakistanStrikes.injuries += +drone.injuries || 0;
   };
 
-  DroneApp.sideBarInfo(DroneApp.stats.allStrikes);
+  // DroneApp.sideBarInfo(DroneApp.stats.allStrikes);
 };
 
 // Plots the data onto the map with markers
@@ -131,28 +133,28 @@ DroneApp.popUpWindow = function(drone, marker){
 DroneApp.changeMapPosition = function(map){
   var self = this;
   self.buttons = document.getElementsByClassName("radio");
-  
+
   for (var i = 0; i< self.buttons.length; i++){
     self.buttons[i].addEventListener("click", function(){
       for (var i = 0; i < self.buttons.length; i++){
         self.buttons[i].checked = false;
       }
 
-    this.checked = true;
+      this.checked = true;
 
-  if (this.id === "yemen-strikes"){
-    map.setCenter({ lat: 16.160990, lng: 46.088293});
-    map.setZoom(7);
-    DroneApp.sideBarInfo(DroneApp.stats.yemenStrikes);  
-    } else if (this.id === "somalia-strikes"){
+      if (this.id === "yemen-strikes"){
+        map.setCenter({ lat: 16.160990, lng: 46.088293});
+        map.setZoom(7);
+        DroneApp.sideBarInfo(DroneApp.stats.yemenStrikes);  
+      } else if (this.id === "somalia-strikes"){
         map.setCenter({ lat: 2.972296, lng: 43.626871}); 
         map.setZoom(7);
         DroneApp.sideBarInfo(DroneApp.stats.somaliaStrikes);
-    } else if (this.id === "pakistan-strikes"){
+      } else if (this.id === "pakistan-strikes"){
         map.setCenter({ lat: 32.085580, lng: 69.194006}); 
         map.setZoom(7);
         DroneApp.sideBarInfo(DroneApp.stats.pakistanStrikes);
-    } else if (this.id === "all-strikes"){
+      } else if (this.id === "all-strikes"){
         map.setCenter({ lat: 16.9931, lng: 54.7028 }); 
         map.setZoom(4);
         DroneApp.sideBarInfo(DroneApp.stats.allStrikes);
@@ -162,24 +164,32 @@ DroneApp.changeMapPosition = function(map){
 };
 
 DroneApp.sideBarInfo = function(selectedRegion){
-  $("#country-stats").remove()
-  // DroneApp.animatedCounter();
-  $("#filter").append("<div id='country-stats'><h3><span>Strikes:</span> " + selectedRegion.strikes + "</h3><h3><span>Deaths:</span> " + selectedRegion.deaths + "</h3><h3><span>Injuries:</span> " + selectedRegion.injuries) + "</h3></div>";
+ $("#strikes-stats").html(0);
+ $("#deaths-stats").html(0);
+ $("#injuries-stats").html(0);
+
+  var strikeTimer = setInterval(function() {
+    var strikes = parseFloat($("#strikes-stats").html());
+    $("#strikes-stats").html(strikes+=1);
+    if(strikes >= selectedRegion.strikes) clearInterval(strikeTimer);
+  }, 20);
+
+  var deathsTimer = setInterval(function() {
+    var deaths = parseFloat($("#deaths-stats").html());
+    $("#deaths-stats").html(deaths+=1);
+    if(deaths >= selectedRegion.deaths) clearInterval(deathsTimer);
+  }, 1);
+
+  var injuriesTimer = setInterval(function() {
+    var injuries = parseFloat($("#injuries-stats").html());
+    $("#injuries-stats").html(injuries+=1);
+    if(injuries >= selectedRegion.injuries) clearInterval(injuriesTimer);
+  }, 10);
 };
 
-// DroneApp.animatedCounter = function(){
-//   $('.count').each(function() {
-//       $(this).prop('Counter',0).animate({
-//           Counter: $(this).text()
-//       }, {
-//           duration: 4000,
-//           easing: 'swing',
-//           step: function (now) {
-//               $(this).text(Math.ceil(now));
-//           }
-//       });
-//   });
-// };
+DroneApp.animatedCounter = function(){
+
+};
 
 document.addEventListener("DOMContentLoaded", function(){
   DroneApp.initialize();
