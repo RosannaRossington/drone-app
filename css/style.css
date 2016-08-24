@@ -1,6 +1,4 @@
-@import 'https://fonts.googleapis.com/css?family=Alfa+Slab+One|Abel';
-/*@import 'https://fonts.googleapis.com/css?family=Abel';
-*/@import 'https://fonts.googleapis.com/css?family=Permanent+Marker';
+@import 'https://fonts.googleapis.com/css?family=Alfa+Slab+One|Abel|Raleway';
 
 html, body {
   background-color: BlanchedAlmond;
@@ -10,9 +8,9 @@ html, body {
   font-family: Abel;
 }
 
-/*h1, h2 {
-  font-family: 'Permanent Marker', cursive;
-}*/
+h1, h2 {
+  font-family: 'Raleway', sans-serif;
+}
 
 h3, h4, h5 {
   margin: 0px;
@@ -60,11 +58,21 @@ h3, h4, h5 {
   display: inline-block;
   padding: 10px;
   border-right: 4px solid #e15454;
+  text-align: center;
+}
+
+form {
+  text-align: left;
+  padding-left: 90px;
 }
 
 #country-stats {
   text-align: center;
   padding-top: 20px;
+}
+
+hr {
+  margin: 30px 0px;
 }
 
 li {
