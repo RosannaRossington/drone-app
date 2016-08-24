@@ -118,7 +118,7 @@ DroneApp.popUpWindow = function(drone, marker){
 
     $("#main-content").remove();
 
-    $("#infoBox").prepend("<div id='main-content'><h3>" + "<span>Location:</span> " + this.droneLocation + ", " + this.droneCountry + "</h3>" + "<h4>" + "<span>Date: </span>" + this.droneDate + "</h4>" + "<h4>" + "<span>Deaths: </span>" + this.droneDeaths + "</h4>" + "<h4><span>Target</span>: " + this.droneTarget + "</h4> <h4>" + "<span>Summary: </span>"+ "<a href='" + this.droneLink + "'> " + this.droneNarrative + "</h4> </a></div>");
+    $("#infoBox").prepend("<div id='main-content'><h3>" + "<span>Location:</span> " + this.droneLocation + ", " + this.droneCountry + "</h3>" + "<h4>" + "<span>Date: </span>" + this.droneDate + "</h4>" + "<h4>" + "<span>Deaths: </span><i class='fa fa-male' aria-hidden='true'></i> " + this.droneDeaths + "</h4>" + "<h4><span>Target</span>: <i class='fa fa-bullseye' aria-hidden='true'></i> " + this.droneTarget + "</h4> <h4>" + "<span>Summary: </span>"+ "<a href='" + this.droneLink + "'> " + this.droneNarrative + "</h4> </a></div>");
     $("#infoBox").show();
 
     this.closeButton.addEventListener("click", function(){
