@@ -1,7 +1,6 @@
 var DroneApp = DroneApp || {};
 
 DroneApp.markers  = [];
-DroneApp.markerclusterer;
 
 DroneApp.stats = {
   allStrikes: {
@@ -35,8 +34,12 @@ DroneApp.initialize = function(){
     styles: [{"featureType":"landscape","elementType":"geometry","stylers":[{"saturation":"-100"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels.text","stylers":[{"color":"#545454"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"saturation":"-87"},{"lightness":"-40"},{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.fill","stylers":[{"color":"#f0f0f0"},{"saturation":"-22"},{"lightness":"-16"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.highway.controlled_access","elementType":"labels.icon","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"saturation":"-52"},{"hue":"#00e4ff"},{"lightness":"-16"}]}]
   });
 
-  DroneApp.requestData();
-  DroneApp.changeMapPosition(this.map);
+  this.markerclusterer = new MarkerClusterer(this.map, [], {
+    minimumClusterSize: 10
+  });
+
+  this.requestData();
+  this.changeMapPosition(this.map);
 };
 
 // Requests the API data
@@ -82,15 +85,17 @@ DroneApp.incrementVariables = function(drone){
 
 // Plots the data onto the map with markers
 DroneApp.plotData = function(drone){
-  this.latlng = new google.maps.LatLng(drone.lat, drone.lon);
-  this.marker = new google.maps.Marker({
-    position: this.latlng,
+  DroneApp.markerclusterer.clearMarkers();
+  var latlng = new google.maps.LatLng(drone.lat, drone.lon);
+  var marker = new google.maps.Marker({
+    position: latlng,
     map: DroneApp.map,
     icon: "http://maps.google.com/mapfiles/ms/icons/red.png"
   });
 
-  DroneApp.markers.push(this.marker);
-  DroneApp.popUpWindow(drone, this.marker);
+  DroneApp.markers.push(marker);
+  DroneApp.popUpWindow(drone, marker);
+  DroneApp.markerclusterer.addMarkers(DroneApp.markers);
 };
 
 // Adds the drones information to an info window
