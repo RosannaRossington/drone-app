@@ -47,8 +47,8 @@ DroneApp.requestData = function(){
   var self = this;
   return $.ajax({
     type: "GET",
-    dataType: "jsonp",
-    url: "http://api.dronestre.am/data",
+    dataType: "json",
+    url: "/drone-data",
   }).done(self.loopThroughData);
 };
 
