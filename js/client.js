@@ -164,9 +164,13 @@ DroneApp.changeMapPosition = function(map){
 };
 
 DroneApp.sideBarInfo = function(selectedRegion){
- $("#strikes-stats").html(0);
- $("#deaths-stats").html(0);
- $("#injuries-stats").html(0);
+
+  $("#country-stats").remove();
+  $("#filter").append("<div id='country-stats'><h3><span>Strikes:</span> " + selectedRegion.strikes + "</h3><h3><span>Deaths:</span> " + selectedRegion.deaths + "</h3><h3><span>Injuries:</span> " + selectedRegion.injuries) + "</h3></div>";
+
+  $("#strikes-stats").html(0);
+  $("#deaths-stats").html(0);
+  $("#injuries-stats").html(0);
 
   var strikeTimer = setInterval(function() {
     var strikes = parseFloat($("#strikes-stats").html());
@@ -185,10 +189,6 @@ DroneApp.sideBarInfo = function(selectedRegion){
     $("#injuries-stats").html(injuries+=1);
     if(injuries >= selectedRegion.injuries) clearInterval(injuriesTimer);
   }, 10);
-};
-
-DroneApp.animatedCounter = function(){
-
 };
 
 document.addEventListener("DOMContentLoaded", function(){

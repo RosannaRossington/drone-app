@@ -1,0 +1,22 @@
+{
+  "name": "drone-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "bower cache clean && bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RosannaRossington/drone-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RosannaRossington/drone-app/issues"
+  },
+  "homepage": "https://github.com/RosannaRossington/drone-app#readme",
+  "dependencies": {
+    "bower": "^1.7.9"
+  }
+}
