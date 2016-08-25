@@ -194,3 +194,4 @@ DroneApp.animatedCounter = function(){
 document.addEventListener("DOMContentLoaded", function(){
   DroneApp.initialize();
 });
+
